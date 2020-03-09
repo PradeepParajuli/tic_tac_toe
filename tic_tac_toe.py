@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import ttk  # provide combo box
 from PIL import ImageTk
 from tkinter import messagebox
 
@@ -9,6 +8,7 @@ class tic_tac_toe:
         self.window = window
         self.window.title("Tic Tak Toe")
         self.window.geometry("500x700")
+        self.window.resizable(0,0)
 
         # setting background image
         self.bg_image = ImageTk.PhotoImage(file="Images/bg_image.jpg")
@@ -24,14 +24,33 @@ class tic_tac_toe:
                       bg="yellow", fg="red", bd=10, relief=GROOVE)
         title.place(x=0, y=0, relwidth=1)  # relwidth =1 --> set relative width according to window
 
-        # -------- Manage Board ----------------------------------
-        self.board = []
-        self.numaricBoard = [["","",""],["","",""],["","",""]]
+
+        self.palyer_o_points = 0
+        self.palyer_x_points = 0
+
+
 
         # player buttons------
+        self.newBoard()
+
+    def newBoard(self):
+        # -------- Manage Board ----------------------------------
+        self.board = []
+        self.numaricBoard = [["", "", ""], ["", "", ""], ["", "", ""]]
         self.stepsCount = 0
+
+        # player x points lable
+        self.palyer_x_points_lable = Label(self.window, font=("times new roman", 40, "bold"), text=self.palyer_x_points,
+                                           bg="white", fg="black", bd=0, relief=GROOVE)
+        self.palyer_x_points_lable.place(x=170, y=210, width=70, height=70)
+
+        # player o points lable
+        self.palyer_x_points_lable = Label(self.window, font=("times new roman", 40, "bold"), text=self.palyer_o_points,
+                                           bg="white", fg="black",bd=0, relief=GROOVE)
+        self.palyer_x_points_lable.place(x=410, y=210, width=70, height=70)
+
+
         self.buttons_()
-        #  Variables --------
 
     def buttons_(self): # todo
 
@@ -73,13 +92,14 @@ class tic_tac_toe:
 
 
     def changeImage(self,position):
-        if (self.stepsCount < 9) :
+        if (self.stepsCount < 8) :
             self.selectImage(position)
 
         else:
             # print game over
-            messagebox.showinfo("Game Over")
-        print("Clicked")
+            messagebox.showinfo("Winner","Match Is Draw \n Both Players Are Equal")
+            self.newBoard()
+
 
 
     def selectImage(self,position):
@@ -132,17 +152,25 @@ class tic_tac_toe:
 
     def gameWinning(self,player): #todo
         win = False
+        #print(self.numaricBoard)
         for i in range(3):
-            if (self.numaricBoard[i][0] == self.numaricBoard[i][1] == self.numaricBoard[i][2]) or (self.numaricBoard[0][i] == self.numaricBoard[1][i] == self.numaricBoard[2][i]):
-                if self.numaricBoard[i][1] != "":
-                    win = True
+            if (self.numaricBoard[i][0] == self.numaricBoard[i][1] == self.numaricBoard[i][2] and self.numaricBoard[i][1] != "") or (self.numaricBoard[0][i] == self.numaricBoard[1][i] == self.numaricBoard[2][i] and self.numaricBoard[1][i] != ""):
+                win = True
+
         if (self.numaricBoard[0][0] == self.numaricBoard[1][1] == self.numaricBoard[2][2]) or (self.numaricBoard[0][2] == self.numaricBoard[1][1] == self.numaricBoard[2][0] and (self.numaricBoard[1][1]!="")):
             if self.numaricBoard[1][1] != "":
                 win = True
 
         if win == True:
             # print game win
-            messagebox.showinfo("Player {} Is Winner!".format(player))
+            if player == "X":
+                self.palyer_x_points+=1
+            if player == "O":
+                self.palyer_o_points+=1
+
+            messagebox.showinfo("Winner", "Player {} \n Wins The Match".format(player))
+            self.newBoard()
+
 
 
 
