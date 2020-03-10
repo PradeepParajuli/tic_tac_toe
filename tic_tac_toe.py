@@ -91,18 +91,8 @@ class tic_tac_toe:
         self.btn_22.place(x=320, y=575, width=80, height=80)
 
 
+
     def changeImage(self,position):
-        if (self.stepsCount < 8) :
-            self.selectImage(position)
-
-        else:
-            # print game over
-            messagebox.showinfo("Winner","Match Is Draw \n Both Players Are Equal")
-            self.newBoard()
-
-
-
-    def selectImage(self,position):
         if position not in self.board:
             positionCode = [int(position[0]), int(position[1])]
 
@@ -169,6 +159,11 @@ class tic_tac_toe:
                 self.palyer_o_points+=1
 
             messagebox.showinfo("Winner", "Player {} \n Wins The Match".format(player))
+            self.newBoard()
+
+        if (self.stepsCount >= 9):
+            # print game over
+            messagebox.showinfo("Winner", "Match Is Draw \n Both Players Are Equal")
             self.newBoard()
 
 
